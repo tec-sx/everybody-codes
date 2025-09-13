@@ -93,6 +93,13 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
             {
                 try
                 {
+                    var existingCamera = await cameraRepository.GetCameraByNumberAsync(dto.Number);
+                    
+                    if (existingCamera != null)
+                    {
+                        continue;
+                    }
+
                     var camera = new CameraEntity
                     {
                         Number = dto.Number,

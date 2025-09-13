@@ -41,11 +41,11 @@ public class CameraRepository : ICameraRepository
             .ToListAsync();
     }
 
-    public Task<CameraEntity> GetCameraByNumberAsync(int number)
+    public Task<CameraEntity?> GetCameraByNumberAsync(int number)
     {
         return _ctx.Cameras
             .Where(r => r.DeletedAt == null)
-            .SingleAsync(c => c.Number == number);
+            .SingleOrDefaultAsync(c => c.Number == number);
     }
 
     public async Task SaveChangesAsync()

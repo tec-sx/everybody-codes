@@ -36,7 +36,7 @@ public static class WebApplicationBuilderExtensions
             {
                 options.AddPolicy("localClientApp", policyBuilder =>
                 {
-                    policyBuilder.WithOrigins("http://localhost:3000");
+                    policyBuilder.WithOrigins("http://127.0.0.1:5500");
                     policyBuilder.AllowAnyHeader();
                     policyBuilder.AllowAnyMethod();
                     policyBuilder.AllowCredentials();
