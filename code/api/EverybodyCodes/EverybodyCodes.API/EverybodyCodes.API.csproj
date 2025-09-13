@@ -10,4 +10,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EverybodyCodes.Application\EverybodyCodes.Application.csproj" />
+  </ItemGroup>
+
+	<Target Name="CopyDataFiles" AfterTargets="Build">
+		<ItemGroup>
+			<DataFile Include="$(SolutionDir)..\..\..\data\cameras-defb.csv"></DataFile>
+		</ItemGroup>
+		<Copy SourceFiles="@(DataFile)" DestinationFolder="$(TargetDir)\data\" SkipUnchangedFiles="true" />
+	</Target>
+
 </Project>
