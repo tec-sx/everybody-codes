@@ -1,5 +1,5 @@
-﻿using EverybodyCodes.ConsoleApp.Contracts;
-using EverybodyCodes.Infrastructure.Data.Entities;
+﻿using EverybodyCodes.Application.Contracts;
+using EverybodyCodes.ConsoleApp.Contracts;
 using EverybodyCodes.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -7,12 +7,12 @@ namespace EverybodyCodes.ConsoleApp.Services;
 
 internal class CameraSearchService : ICameraSearchService
 {
-    private readonly ICameraRepository _cameraRepository;
+    private readonly ICameraService _cameraService;
     private readonly ILogger<CameraSearchService> _logger;
 
-    public CameraSearchService(ICameraRepository cameraRepository, ILogger<CameraSearchService> logger)
+    public CameraSearchService(ICameraService cameraService, ILogger<CameraSearchService> logger)
     {
-        _cameraRepository = cameraRepository;
+        _cameraService = cameraService;
         _logger = logger;
     }
 
@@ -22,7 +22,7 @@ internal class CameraSearchService : ICameraSearchService
 
         try
         {
-            var cameras = await _cameraRepository.SearchByNameAsync(searchTerm);
+            var cameras = await _cameraService.SearchByNameAsync(searchTerm);
 
             if (cameras.Count == 0)
             {
@@ -36,7 +36,7 @@ internal class CameraSearchService : ICameraSearchService
                 Console.WriteLine($"{camera.Number} |");
                 Console.Write($"{camera.Name} |");
                 Console.Write($"{camera.Latitude:F6} |");
-                Console.Write($"{camera.Longitude:F6} |");
+                Console.Write($"{camera.Longitude:F6}");
             }
 
             _logger.LogInformation("Search completed. Found {Count} matching cameras", cameras.Count);

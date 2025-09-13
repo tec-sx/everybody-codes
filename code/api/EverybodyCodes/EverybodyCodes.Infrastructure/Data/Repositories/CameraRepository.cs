@@ -41,6 +41,13 @@ public class CameraRepository : ICameraRepository
             .ToListAsync();
     }
 
+    public Task<CameraEntity> GetCameraByNumberAsync(int number)
+    {
+        return _ctx.Cameras
+            .Where(r => r.DeletedAt == null)
+            .SingleAsync(c => c.Number == number);
+    }
+
     public async Task SaveChangesAsync()
     {
         await _ctx.SaveChangesAsync();

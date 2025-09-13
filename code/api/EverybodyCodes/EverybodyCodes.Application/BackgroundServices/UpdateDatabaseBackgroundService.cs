@@ -13,7 +13,7 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<UpdateDatabaseBackgroundService> _logger;
     private readonly TimeSpan _importInterval = TimeSpan.FromHours(24);
-    private const string _dataUrl = "data/cameras-defb.csv";
+    private const string _dataFileName = "cameras-defb.csv";
 
     public UpdateDatabaseBackgroundService(IServiceProvider serviceProvider, ILogger<UpdateDatabaseBackgroundService> logger)
     {
@@ -70,18 +70,19 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var cameraParser = scope.ServiceProvider.GetRequiredService<ICameraParser>();
         var cameraRepository = scope.ServiceProvider.GetRequiredService<ICameraRepository>();
+        var dataPath = Path.Combine(AppContext.BaseDirectory, "data", _dataFileName);
 
         try
         {
             _logger.LogInformation("Starting camera import from CSV");
 
-            if (!File.Exists(_dataUrl))
+            if (!File.Exists(dataPath))
             {
-                _logger.LogWarning("CSV file not found: {FilePath}", _dataUrl);
+                _logger.LogWarning("CSV file not found: {FilePath}", dataPath);
                 return;
             }
 
-            var cameraData = cameraParser.Parse(_dataUrl, ';');
+            var cameraData = cameraParser.Parse(dataPath, ';');
 
             if (cameraData.Count == 0)
             {
@@ -94,6 +95,7 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
                 {
                     var camera = new CameraEntity
                     {
+                        Number = dto.Number,
                         Name = dto.Name,
                         Latitude = dto.Latitude,
                         Longitude = dto.Longitude
