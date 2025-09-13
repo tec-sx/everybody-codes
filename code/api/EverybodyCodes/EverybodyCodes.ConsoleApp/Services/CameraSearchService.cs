@@ -18,8 +18,6 @@ internal class CameraSearchService : ICameraSearchService
 
     public async Task SearchCamerasAsync(string searchTerm)
     {
-        _logger.LogInformation("Searching for cameras containing: '{SearchTerm}'", searchTerm);
-
         try
         {
             var cameras = await _cameraService.SearchByNameAsync(searchTerm);
@@ -31,15 +29,20 @@ internal class CameraSearchService : ICameraSearchService
                 return;
             }
 
+            Console.WriteLine();
+            Console.WriteLine("---------------------------------------------------------------------");
+
             foreach (var camera in cameras)
             {
-                Console.WriteLine($"{camera.Number} |");
-                Console.Write($"{camera.Name} |");
-                Console.Write($"{camera.Latitude:F6} |");
+                Console.Write($"{camera.Number} | ");
+                Console.Write($"{camera.Name} | ");
+                Console.Write($"{camera.Latitude:F6} | ");
                 Console.Write($"{camera.Longitude:F6}");
+                Console.WriteLine();
             }
 
-            _logger.LogInformation("Search completed. Found {Count} matching cameras", cameras.Count);
+            Console.WriteLine("---------------------------------------------------------------------");
+            Console.WriteLine();
         }
         catch (Exception ex)
         {
