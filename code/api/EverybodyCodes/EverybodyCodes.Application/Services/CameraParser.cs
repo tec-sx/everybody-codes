@@ -1,9 +1,10 @@
-﻿using EverybodyCodes.Application.Models;
+﻿using EverybodyCodes.Application.Contracts;
+using EverybodyCodes.Application.Models;
 using System.Globalization;
 
 namespace EverybodyCodes.Application.Services;
 
-public class CameraDataParser
+public class CameraParser : ICameraParser
 {
     public List<CameraDto> Parse(string dataPath, char separator)
     {

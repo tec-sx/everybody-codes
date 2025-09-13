@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EverybodyCodes.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--name Neude"
+    }
+  }
+}
