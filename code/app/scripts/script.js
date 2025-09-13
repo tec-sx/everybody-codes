@@ -1,10 +1,7 @@
 async function loadData() {
     try {
-        // Example API returning numbers (replace with your API)
         const response = await fetch("https://localhost:7006/camera");
         const data = await response.json();
-
-        console.log(data);
 
         data.forEach(item => {
             let targetTable;

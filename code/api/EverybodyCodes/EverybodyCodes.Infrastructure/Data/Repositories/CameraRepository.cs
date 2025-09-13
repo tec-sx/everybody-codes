@@ -15,7 +15,6 @@ public class CameraRepository : ICameraRepository
     public async Task<CameraEntity> AddAsync(CameraEntity entity)
     {
         var camera = await _ctx.Cameras.AddAsync(entity);
-        await _ctx.SaveChangesAsync();
 
         return camera.Entity;
     }

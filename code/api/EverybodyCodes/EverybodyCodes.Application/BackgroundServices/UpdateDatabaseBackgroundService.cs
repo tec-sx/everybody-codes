@@ -1,4 +1,5 @@
 ﻿using EverybodyCodes.Application.Contracts;
+using EverybodyCodes.Application.Models;
 using EverybodyCodes.Infrastructure.Data;
 using EverybodyCodes.Infrastructure.Data.Entities;
 using EverybodyCodes.Infrastructure.Data.Repositories;
@@ -10,7 +11,10 @@ namespace EverybodyCodes.Application.Services;
 
 internal class UpdateDatabaseBackgroundService : BackgroundService
 {
+    // Since BackgroundService is registered as a singleton, we need to use IServiceProvider to create scopes for scoped services 
+    // instead of injecting them directly.
     private readonly IServiceProvider _serviceProvider;
+    
     private readonly ILogger<UpdateDatabaseBackgroundService> _logger;
     private readonly TimeSpan _importInterval = TimeSpan.FromHours(24);
     private const string _dataFileName = "cameras-defb.csv";
@@ -57,7 +61,6 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        // Ensure database is created
         await ctx.Database.EnsureCreatedAsync();
         _logger.LogInformation("Database initialized");
 
@@ -69,7 +72,7 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
     {
         using var scope = _serviceProvider.CreateScope();
         var cameraParser = scope.ServiceProvider.GetRequiredService<ICameraParser>();
-        var cameraRepository = scope.ServiceProvider.GetRequiredService<ICameraRepository>();
+        var cameraService = scope.ServiceProvider.GetRequiredService<ICameraService>();
         var dataPath = Path.Combine(AppContext.BaseDirectory, "data", _dataFileName);
 
         try
@@ -89,35 +92,8 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
                 _logger.LogWarning("No camera data found in CSV file");
                 return;
             }
-            foreach (var dto in cameraData)
-            {
-                try
-                {
-                    var existingCamera = await cameraRepository.GetCameraByNumberAsync(dto.Number);
-                    
-                    if (existingCamera != null)
-                    {
-                        continue;
-                    }
 
-                    var camera = new CameraEntity
-                    {
-                        Number = dto.Number,
-                        Name = dto.Name,
-                        Latitude = dto.Latitude,
-                        Longitude = dto.Longitude
-                    };
-
-                    await cameraRepository.AddAsync(camera);
-
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Error importing camera: {Name}", dto.Name);
-                }
-            }
-
-            await cameraRepository.SaveChangesAsync();
+            await cameraService.AddCamerasBulkAsync(cameraData);
         }
         catch (Exception ex)
         {

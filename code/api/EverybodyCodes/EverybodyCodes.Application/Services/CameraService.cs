@@ -1,5 +1,6 @@
 ﻿using EverybodyCodes.Application.Contracts;
 using EverybodyCodes.Application.Models;
+using EverybodyCodes.Infrastructure.Data.Entities;
 using EverybodyCodes.Infrastructure.Data.Repositories;
 
 namespace EverybodyCodes.Application.Services;
@@ -11,6 +12,45 @@ public class CameraService : ICameraService
     public CameraService(ICameraRepository cameraRepository)
     {
         _cameraRepository = cameraRepository;
+    }
+
+    public async Task AddCameraAsync(CameraDto cameraDto)
+    {
+        var cameraEntity = new CameraEntity
+        {
+            Number = cameraDto.Number,
+            Name = cameraDto.Name,
+            Latitude = cameraDto.Latitude,
+            Longitude = cameraDto.Longitude
+        };
+
+        await _cameraRepository.AddAsync(cameraEntity);
+        await _cameraRepository.SaveChangesAsync();
+    }
+
+    public async Task AddCamerasBulkAsync(IEnumerable<CameraDto> cameraDtos)
+    {
+        foreach (var cameraDto in cameraDtos)
+        {
+            var existingCamera = await _cameraRepository.GetCameraByNumberAsync(cameraDto.Number);
+
+            if (existingCamera != null)
+            {
+                continue;
+            }
+
+            var cameraEntity = new CameraEntity
+            {
+                Number = cameraDto.Number,
+                Name = cameraDto.Name,
+                Latitude = cameraDto.Latitude,
+                Longitude = cameraDto.Longitude
+            };
+
+            await _cameraRepository.AddAsync(cameraEntity);
+        }
+
+        await _cameraRepository.SaveChangesAsync();
     }
 
     public async Task<IReadOnlyCollection<CameraDto>> GetAllCamerasAsync()

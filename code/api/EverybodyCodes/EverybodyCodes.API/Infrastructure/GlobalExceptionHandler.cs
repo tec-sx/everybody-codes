@@ -19,12 +19,15 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         _logger.LogError(exception, "An unhandled exception has occurred: {Message}", exception.Message);
 
-        int statusCode = StatusCodes.Status500InternalServerError;
+        int statusCode;
 
         switch (exception)
         {
             case ArgumentException _:
                 statusCode = StatusCodes.Status400BadRequest;
+                break;
+            default:
+                statusCode = StatusCodes.Status500InternalServerError;
                 break;
         }
 

@@ -10,4 +10,7 @@ public interface ICameraService
     
     Task<CameraDto?> GetCameraByNumberAsync(int number);
     
+    Task AddCameraAsync(CameraDto cameraDto);
+
+    Task AddCamerasBulkAsync(IEnumerable<CameraDto> cameraDtos);
 }
