@@ -100,7 +100,7 @@ public class CameraParser : ICameraParser
         {
             Number = number,
             Name = name,
-            Lattitude = lattitude,
+            Latitude = lattitude,
             Longitude = longitude
         };
 

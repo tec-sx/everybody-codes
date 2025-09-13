@@ -40,4 +40,9 @@ public class CameraRepository : ICameraRepository
             .OrderBy(c => c.Name)
             .ToListAsync();
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await _ctx.SaveChangesAsync();
+    }
 }
