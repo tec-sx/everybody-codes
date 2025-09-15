@@ -34,8 +34,9 @@ public class CameraRepository : ICameraRepository
 
     public Task<List<CameraEntity>> SearchByNameAsync(string searchTerm)
     {
+
         return _ctx.Cameras
-            .Where(c => c.Name.Contains(searchTerm))
+            .Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()))
             .OrderBy(c => c.Name)
             .ToListAsync();
     }
