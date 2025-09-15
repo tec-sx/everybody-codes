@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "e9394a5a-3b16-4c9c-9316-b5cb74ad0131",
+		"name": "EveryBodyCodes",
+		"description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48472881",
+		"_collection_link": "https://tec-sx-7438012.postman.co/workspace/TecSx's-Workspace~b19c840e-ca56-4638-82e0-5d645354b52d/collection/48472881-e9394a5a-3b16-4c9c-9316-b5cb74ad0131?action=share&source=collection_link&creator=48472881"
+	},
+	"item": [
+		{
+			"name": "GetCameras_Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{net-localhost}}/camera",
+					"host": [
+						"{{net-localhost}}"
+					],
+					"path": [
+						"camera"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "SearchCameras_ReturnsResults",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"pm.test(\"Response is not empty\", function() {",
+							"    pm.expect(pm.response.json().length).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{net-localhost}}/camera/search?searchTerm=Neude",
+					"host": [
+						"{{net-localhost}}"
+					],
+					"path": [
+						"camera",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchTerm",
+							"value": "Neude"
+						}
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "SearchCameras_ReturnsEmpty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GET request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"pm.test(\"Response is empty\", function() {",
+							"    pm.expect(pm.response.json().length).to.be.equal(0);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{net-localhost}}/camera/search?searchTerm=Something that could not possiby return any results",
+					"host": [
+						"{{net-localhost}}"
+					],
+					"path": [
+						"camera",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchTerm",
+							"value": "Something that could not possiby return any results"
+						}
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		}
+	]
+}
