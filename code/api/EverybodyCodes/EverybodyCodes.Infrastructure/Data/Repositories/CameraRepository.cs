@@ -40,15 +40,38 @@ public class CameraRepository : ICameraRepository
             .ToListAsync();
     }
 
-    public Task<CameraEntity?> GetCameraByNumberAsync(int number)
-    {
-        return _ctx.Cameras
-            .Where(r => r.DeletedAt == null)
-            .SingleOrDefaultAsync(c => c.Number == number);
-    }
-
     public async Task SaveChangesAsync()
     {
+        await _ctx.SaveChangesAsync();
+    }
+
+    public async Task BulkUpsertCameras(IEnumerable<CameraEntity> cameraEntities)
+    {
+        if (!cameraEntities.Any())
+        {
+            return;
+        }
+
+        var cameraNames = cameraEntities.Select(c => c.Name).ToList();
+
+        var existingCameras = await _ctx.Cameras
+            .AsNoTracking()
+            .Where(c => cameraNames.Contains(c.Name))
+            .ToDictionaryAsync(c => c.Name);
+
+        foreach (var cameraEntity in cameraEntities)
+        {
+            if (existingCameras.TryGetValue(cameraEntity.Name, out var existingCamera))
+            {
+                var cameraToUpdate = existingCamera with { Latitude = cameraEntity.Latitude, Longitude = cameraEntity.Longitude };
+                _ctx.Cameras.Update(cameraToUpdate);
+            }
+            else
+            {
+                await _ctx.Cameras.AddAsync(cameraEntity);
+            }
+        }
+
         await _ctx.SaveChangesAsync();
     }
 }

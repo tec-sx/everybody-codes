@@ -8,8 +8,6 @@ public interface ICameraService
 
     Task<IReadOnlyCollection<CameraDto>> SearchByNameAsync(string name);
     
-    Task<CameraDto?> GetCameraByNumberAsync(int number);
-    
     Task AddCameraAsync(CameraDto cameraDto);
 
     Task AddCamerasBulkAsync(IEnumerable<CameraDto> cameraDtos);

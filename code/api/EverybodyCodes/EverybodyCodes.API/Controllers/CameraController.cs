@@ -32,13 +32,5 @@ namespace EverybodyCodes.API.Controllers
 
             return Ok(cameraDtos);
         }
-
-        [HttpGet("number")]
-        public async Task<IActionResult> GetCameraByNumber([FromQuery] int number)
-        {
-            CameraDto cameraDtos = await _cameraService.GetCameraByNumberAsync(number);
-
-            return Ok(cameraDtos);
-        }
     }
 }

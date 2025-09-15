@@ -30,27 +30,20 @@ public class CameraService : ICameraService
 
     public async Task AddCamerasBulkAsync(IEnumerable<CameraDto> cameraDtos)
     {
-        foreach (var cameraDto in cameraDtos)
+        if (!cameraDtos.Any())
         {
-            var existingCamera = await _cameraRepository.GetCameraByNumberAsync(cameraDto.Number);
-
-            if (existingCamera != null)
-            {
-                continue;
-            }
-
-            var cameraEntity = new CameraEntity
-            {
-                Number = cameraDto.Number,
-                Name = cameraDto.Name,
-                Latitude = cameraDto.Latitude,
-                Longitude = cameraDto.Longitude
-            };
-
-            await _cameraRepository.AddAsync(cameraEntity);
+            return;
         }
 
-        await _cameraRepository.SaveChangesAsync();
+        var camerasEntities = cameraDtos.Select(cameraDtos => new CameraEntity
+        {
+            Number = cameraDtos.Number,
+            Name = cameraDtos.Name,
+            Latitude = cameraDtos.Latitude,
+            Longitude = cameraDtos.Longitude
+        });
+        
+        await _cameraRepository.BulkUpsertCameras(camerasEntities);
     }
 
     public async Task<IReadOnlyCollection<CameraDto>> GetAllCamerasAsync()
@@ -64,19 +57,6 @@ public class CameraService : ICameraService
             Latitude = cameraEntity?.Latitude ?? 0,
             Longitude = cameraEntity?.Longitude ?? 0
         }).ToList();
-    }
-
-    public async Task<CameraDto?> GetCameraByNumberAsync(int number)
-    {
-        var cameraEntity = await _cameraRepository.GetCameraByNumberAsync(number);
-
-        return new CameraDto
-        {
-            Number = cameraEntity?.Number ?? 0,
-            Name = cameraEntity?.Name ?? string.Empty,
-            Latitude = cameraEntity?.Latitude ?? 0,
-            Longitude = cameraEntity?.Longitude ?? 0
-        };
     }
 
     public async Task<IReadOnlyCollection<CameraDto>> SearchByNameAsync(string name)
