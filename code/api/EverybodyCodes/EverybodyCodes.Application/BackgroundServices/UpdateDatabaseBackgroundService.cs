@@ -1,8 +1,5 @@
 ﻿using EverybodyCodes.Application.Contracts;
-using EverybodyCodes.Application.Models;
-using EverybodyCodes.Infrastructure.Data;
-using EverybodyCodes.Infrastructure.Data.Entities;
-using EverybodyCodes.Infrastructure.Data.Repositories;
+ using EverybodyCodes.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,14 +11,19 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
     // Since BackgroundService is registered as a singleton, we need to use IServiceProvider to create scopes for scoped services 
     // instead of injecting them directly.
     private readonly IServiceProvider _serviceProvider;
-    
+    private readonly ICameraParser _cameraParser;
+
     private readonly ILogger<UpdateDatabaseBackgroundService> _logger;
     private readonly TimeSpan _importInterval = TimeSpan.FromHours(24);
     private const string _dataFileName = "cameras-defb.csv";
 
-    public UpdateDatabaseBackgroundService(IServiceProvider serviceProvider, ILogger<UpdateDatabaseBackgroundService> logger)
+    public UpdateDatabaseBackgroundService(
+        IServiceProvider serviceProvider,
+        ICameraParser cameraParser,
+        ILogger<UpdateDatabaseBackgroundService> logger)
     {
         _serviceProvider = serviceProvider;
+        _cameraParser = cameraParser;
         _logger = logger;
     }
 
@@ -71,7 +73,6 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
     private async Task UpdateDatabase()
     {
         using var scope = _serviceProvider.CreateScope();
-        var cameraParser = scope.ServiceProvider.GetRequiredService<ICameraParser>();
         var cameraService = scope.ServiceProvider.GetRequiredService<ICameraService>();
         var dataPath = Path.Combine(AppContext.BaseDirectory, "data", _dataFileName);
 
@@ -85,7 +86,7 @@ internal class UpdateDatabaseBackgroundService : BackgroundService
                 return;
             }
 
-            var cameraData = cameraParser.Parse(dataPath, ';');
+            var cameraData = _cameraParser.Parse(dataPath, ';');
 
             if (cameraData.Count == 0)
             {

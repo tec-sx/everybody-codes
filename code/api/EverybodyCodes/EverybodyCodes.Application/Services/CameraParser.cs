@@ -1,11 +1,19 @@
 ﻿using EverybodyCodes.Application.Contracts;
 using EverybodyCodes.Application.Models;
 using System.Globalization;
+using System.IO.Abstractions;
 
 namespace EverybodyCodes.Application.Services;
 
 public class CameraParser : ICameraParser
 {
+    private readonly IFileSystem _fileSystem;
+
+    public CameraParser(IFileSystem fileSystem)
+    {
+        _fileSystem = fileSystem;
+    }
+
     public List<CameraDto> Parse(string dataPath, char separator)
     {
         if (string.IsNullOrWhiteSpace(dataPath))
@@ -13,13 +21,13 @@ public class CameraParser : ICameraParser
             throw new ArgumentException("Data path cannot be empty");
         }
 
-        if (!File.Exists(dataPath))
+        if (!_fileSystem.File.Exists(dataPath))
         {
             throw new FileNotFoundException($"File not found: {dataPath}");
         }
 
         var cameras = new List<CameraDto>();
-        var lines = File.ReadAllLines(dataPath);
+        var lines = _fileSystem.File.ReadAllLines(dataPath);
 
         if (lines.Length == 0)
         {
