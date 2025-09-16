@@ -1,0 +1,7 @@
+.title {
+    padding: 20px 0 20px 55px;
+    margin: 0 0 0 20px;
+    background: url("/assets/video-camera-icon.png") no-repeat;
+    background-size: 40px;
+    background-position: 0 50%;
+}

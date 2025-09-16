@@ -1,0 +1,102 @@
+<table id="cameraTableContainer">
+  <tbody>
+    <tr>
+
+      <td>
+        <table id="column3">
+          <thead>
+            <tr>
+              <th colspan="4">Cameras 3</th>
+            </tr>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cam of column3">
+              <td>{{ cam.number }}</td>
+              <td>{{ cam.name }}</td>
+              <td>{{ cam.latitude }}</td>
+              <td>{{ cam.longitude }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+
+      <td>
+        <table id="column5">
+          <thead>
+            <tr>
+              <th colspan="4">Cameras 5</th>
+            </tr>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cam of column5">
+              <td>{{ cam.number }}</td>
+              <td>{{ cam.name }}</td>
+              <td>{{ cam.latitude }}</td>
+              <td>{{ cam.longitude }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+
+      <td>
+        <table id="column15">
+          <thead>
+            <tr>
+              <th colspan="4">Cameras 3 &amp; 5</th>
+            </tr>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cam of column15">
+              <td>{{ cam.number }}</td>
+              <td>{{ cam.name }}</td>
+              <td>{{ cam.latitude }}</td>
+              <td>{{ cam.longitude }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+
+      <td>
+        <table id="columnOther">
+          <thead>
+            <tr>
+              <th colspan="4">Cameras Overig</th>
+            </tr>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cam of columnOther">
+              <td>{{ cam.number }}</td>
+              <td>{{ cam.name }}</td>
+              <td>{{ cam.latitude }}</td>
+              <td>{{ cam.longitude }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
