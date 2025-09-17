@@ -1,4 +1,4 @@
-using EverybodyCodes.Application.Contracts;
+using EverybodyCodes.Application.Contracts.Services;
 using EverybodyCodes.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 

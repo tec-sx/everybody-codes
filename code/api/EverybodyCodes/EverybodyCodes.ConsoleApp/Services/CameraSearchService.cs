@@ -1,4 +1,4 @@
-﻿using EverybodyCodes.Application.Contracts;
+﻿using EverybodyCodes.Application.Contracts.Services;
 using EverybodyCodes.ConsoleApp.Contracts;
 using EverybodyCodes.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Logging;

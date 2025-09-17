@@ -1,4 +1,6 @@
-﻿using EverybodyCodes.Application.Contracts;
+﻿using EverybodyCodes.Application.Contracts.Helpers;
+using EverybodyCodes.Application.Contracts.Services;
+using EverybodyCodes.Application.Helpers;
 using EverybodyCodes.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO.Abstractions;
@@ -11,6 +13,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<ICameraParser, CameraParser>();
         services.AddSingleton<IFileSystem, FileSystem>();
+        services.AddSingleton<ITimeProvider, SystemTimeProvider>();
         services.AddHostedService<UpdateDatabaseBackgroundService>();
         services.AddScoped<ICameraService, CameraService>();
 

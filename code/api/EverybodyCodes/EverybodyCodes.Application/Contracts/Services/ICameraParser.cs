@@ -1,6 +1,6 @@
 ﻿using EverybodyCodes.Application.Models;
 
-namespace EverybodyCodes.Application.Contracts;
+namespace EverybodyCodes.Application.Contracts.Services;
 
 public interface ICameraParser
 {
